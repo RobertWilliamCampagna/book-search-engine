@@ -9,7 +9,7 @@ import { saveBookIds, getSavedBookIds } from '../utils/localStorage';
 // Import apollo mutations
 import { useMutation } from '@apollo/react-hooks';
 // Import SAVE_BOOK
-import { SAVE_BOOK } from '../utils/mutation';
+import { SAVE_BOOK } from '../utils/mutations';
 
 const SearchBooks = () => {
   const [saveBook, { error }] = useMutation(SAVE_BOOK);

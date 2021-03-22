@@ -6,7 +6,9 @@ import { loginUser } from '../utils/API';
 import Auth from '../utils/auth';
 
 // Import useMutation from apollo react hooks
+import { useMutation } from '@apollo/react-hooks'
 // Import LOGIN_USER from mutations
+import { LOGIN_USER } from '../utils/mutations'
 
 
 const LoginForm = () => {
