@@ -2,6 +2,7 @@ const express = require('express');
 // import ApolloServer
 const { ApolloServer } = require('apollo-server-express');
 const path = require('path');
+const routes = require('./routes')
 // import GraphQL from 'graphql'
 
 // import our typeDefs and resolvers

@@ -15,7 +15,7 @@ const LoginForm = () => {
   const [userFormData, setUserFormData] = useState({ email: '', password: '' });
   const [validated] = useState(false);
   const [showAlert, setShowAlert] = useState(false);
-// Call loginUser and user mutation
+// Call loginUser and use mutation
   const [ loginUser ] = useMutation(LOGIN_USER);
 
   const handleInputChange = (event) => {
@@ -26,7 +26,6 @@ const LoginForm = () => {
   const handleFormSubmit = async (event) => {
     event.preventDefault();
 
-    // check if form has everything (as per react-bootstrap docs)
     const form = event.currentTarget;
     if (form.checkValidity() === false) {
       event.preventDefault();

@@ -20,14 +20,14 @@ const SearchBooks = () => {
 
   // create state to hold saved bookId values
   const [savedBookIds, setSavedBookIds] = useState(getSavedBookIds());
-
+  // use mutation SAVE_BOOK
+  const [ saveBook ] = useMutation(SAVE_BOOK);
   // set up useEffect hook to save `savedBookIds` list to localStorage on component unmount
   // learn more here: https://reactjs.org/docs/hooks-effect.html#effects-with-cleanup
   useEffect(() => {
     return () => saveBookIds(savedBookIds);
   });
 
-  // create method to search for books and set state on form submit
   const handleFormSubmit = async (event) => {
     event.preventDefault();
 
@@ -39,7 +39,7 @@ const SearchBooks = () => {
       const response = await searchGoogleBooks(searchInput);
 
       if (!response.ok) {
-        throw new Error('something went wrong!');
+        throw new Error('Oops, something went wrong!');
       }
 
       const { items } = await response.json();
@@ -59,10 +59,10 @@ const SearchBooks = () => {
     }
   };
 
-  // create function to handle saving a book to our database
+  // function to save a book
   const handleSaveBook = async (bookId) => {
     // find the book in `searchedBooks` state by the matching id
-    const bookToSave = searchedBooks.find((book) => book.bookId === bookId);
+    const findBook = searchedBooks.find((book) => book.bookId === bookId);
 
     // get token
     const token = Auth.loggedIn() ? Auth.getToken() : null;
@@ -73,15 +73,15 @@ const SearchBooks = () => {
 
     try {
       const { data } = await saveBook ({
-        variables: { input: bookToSave }
+        variables: findBook 
       });
       
       if (error) {
-        throw new Error('Something went wrong')
+        throw new Error('Oops, something went wrong')
       }
       console.log(data);
 
-      // if book successfully saves to user's account, save book id to state
+      // upon success save book id to state
       setSavedBookIds([...savedBookIds, bookToSave.bookId]);
     } catch (err) {
       console.error(err);

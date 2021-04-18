@@ -12,41 +12,14 @@ import { GET_ME } from '../utils/queries'
 import { REMOVE_BOOK } from '../utils/mutations';
 
 
-
+//Remove the useEffect()and use GET_ME
 const SavedBooks = () => {
-  const [removeBook, { error }] = useMutation(REMOVE_BOOK);
 
   const { loading, data } = useQuery( GET_ME );
 
   const userData = data?.me || {};
 
-  const [newUserData, setUserData] = useState({});
-  const userDataLength = Object.keys(newUserData).length;
-
-  useEffect(() => {
-    const getUserData = async () => {
-      try {
-        const token = Auth.loggedIn() ? Auth.getToken() : null;
-
-        if (!token) {
-          return false;
-        }
-
-        const response = await GET_ME(token);
-
-        if (!response.ok) {
-          throw new Error('something went wrong!');
-        }
-
-        const user = await response.json();
-        setUserData(user);
-      } catch (err) {
-        console.error(err);
-      }
-    };
-
-    getUserData();
-  }, [userDataLength]);
+  const [removeBook, { error }] = useMutation(REMOVE_BOOK);
 
   // create function that accepts the book's mongo _id value as param and deletes the book from the database
   const handleDeleteBook = async (bookId) => {
@@ -61,9 +34,8 @@ const SavedBooks = () => {
       });
 
       if(error){
-        throw new Error('something went wrong!')
+        throw new Error('Oops, something went wrong!')
       }
-      console.log(data);
 
       removeBookId(bookId);
     } catch(err){

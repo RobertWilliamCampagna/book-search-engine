@@ -9,7 +9,7 @@ const resolvers = {
     Query: {
         me: async (parent, args, context) => {
             if (context.user) {
-              const userData = await User.findOne({ })
+              const userData = await User.findOne({_id: context.user._id})
               .select('__v -password')
               populate('books');
       
@@ -30,23 +30,39 @@ const resolvers = {
           const user = await User.findOne({ email });
 
           if(!user){
-              throw new AuthenticationError('Credentials are not correct!');
+              throw new AuthenticanError('Credentials are not correct!');
 
           }
           const correctPw = await user.isCorrectPassword(password);
 
           if(!correctPw){
-              throw new AuthenticationError('Credentials are not correct!');
+              throw new AuthenticanError('Credentials are not correct!');
 
           }
           const token = signToken(user);
           return { token, user };
       },
-      saveBook: async(parent, args) =>{
-
+      savedBooks: async(parent, args, context) =>{
+            if(context.user) {
+                const updateUser = await User.findOneAndUpdate (
+                    {_id: context.user._id},
+                    { $addToSet: { savedBooks: args }},
+                    { new: true }
+                )
+                return updateUser;
+            }
+            throw new AuthenticanError('Must be logged in to save book!')
       },
-      removeBook: async(parent, args) => {
-          
+      removeBook: async(parent, args, context) => {
+          if (context.user){
+              const updateUser = await User.findOneAndUpdate(
+                { _id: context.user._id },
+                { $pull: { savedBooks: { bookId: args.bookId } } },
+                { new: true }
+              )
+              return updateUser;
+          }
+          throw new AuthenticanError('Must be logged in to remove book!')
       },
   }
 
